@@ -1,57 +1,40 @@
-import { useState } from 'react'
-import './App.css'
-import Navbar from './components/Navbar'
-import { Container, Row, Col, Button } from 'react-bootstrap'
-import CourseList from './components/CourseList'
-import AddCourseButton from './components/AddCourseButton'
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { CoursesProvider } from './context/CoursesContext';
+import Navbar from './components/Navbar';
+import ProtectedRoute from './components/ProtectedRoute';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import CourseDetailPage from './pages/CourseDetailPage';
+import NewCoursePage from './pages/NewCoursePage';
+import EditCoursePage from './pages/EditCoursePage';
+import SchedulePage from './pages/SchedulePage';
 
-function App() {const [courses, setCourses] = useState([
-  { id: 1, name: "Web Development", code: "SDEV 255", instructor: "Prof. Davis" },
-  { id: 2, name: "Database Systems", code: "SDEV 260", instructor: "Prof. Smith" }
-]);
-
-const handleAddCourse = () => {
-  const newCourse = {
-    id: Date.now(),
-    name: "New Course",
-    code: "NEW 101",
-    instructor: "TBD"
-  };
-  setCourses([...courses, newCourse]);
-};
-
-const handleDropCourse = (id) => {
-  setCourses(courses.filter(course => course.id !== id));
-};
-
- return (
-  <>
-    <Navbar />
-
-    <Container className="py-5">
-      <Row className="mb-4 text-center">
-        <Col>
-          <h1 className="display-4">Bookish Systems</h1>
-          <p className="lead">
-            Manage your course registrations
-          </p>
-        </Col>
-      </Row>
-
-      <Row>
-        <Col className="text-center">
-          <AddCourseButton onAdd={handleAddCourse} />
-        </Col>
-      </Row>
-
-      <Row className="mt-4">
-        <Col md={8} className="mx-auto">
-          <CourseList courses={courses} onDrop={handleDropCourse} />
-        </Col>
-      </Row>
-    </Container>
-  </>
-)
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <CoursesProvider>
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+            <Route path="/courses/new" element={<NewCoursePage />} />
+            <Route path="/courses/:id" element={<CourseDetailPage />} />
+            <Route path="/courses/:id/edit" element={<EditCoursePage />} />
+            <Route
+              path="/schedule"
+              element={
+                <ProtectedRoute>
+                  <SchedulePage />
+                </ProtectedRoute>
+              }
+            />
+          </Routes>
+        </CoursesProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  );
 }
-
-export default App
