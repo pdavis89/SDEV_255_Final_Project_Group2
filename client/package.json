@@ -2,6 +2,10 @@
   "name": "sdev-255-final-project-group2",
   "private": true,
   "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pdavis89/SDEV_255_Final_Project_Group2.git"
+  },
   "type": "module",
   "scripts": {
     "dev": "vite",

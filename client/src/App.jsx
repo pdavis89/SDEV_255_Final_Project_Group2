@@ -13,7 +13,7 @@ import SchedulePage from './pages/SchedulePage';
 
 export default function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename="/SDEV_255_Final_Project_Group2/">
       <AuthProvider>
         <CoursesProvider>
           <Navbar />
