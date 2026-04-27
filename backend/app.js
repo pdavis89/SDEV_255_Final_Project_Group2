@@ -18,7 +18,7 @@ app.get('/', (req, res) => {
 });
 
 // Course API routes
-app.use('/api/courses', courseRoutes);
+app.use('/api', courseRoutes);
 
 connectDB()
   .then(() => {
