@@ -1,44 +1,99 @@
-/* Custom styles for hero animation - keeping these as they're specific */
+
 .hero {
   position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
 }
 
-/* Icon styles */
+.hero .base,
+.hero .framework,
+.hero .vite {
+  inset-inline: 0;
+  margin: 0 auto;
+}
+
+.hero .base {
+  width: 170px;
+  position: relative;
+  z-index: 0;
+}
+
+.hero .framework,
+.hero .vite {
+  position: absolute;
+}
+
+.hero .framework {
+  z-index: 1;
+  top: 34px;
+  height: 28px;
+  transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg) scale(1.4);
+}
+
+.hero .vite {
+  z-index: 0;
+  top: 107px;
+  height: 26px;
+  width: auto;
+  transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg) scale(0.8);
+}
+
+
+.hero-container {
+  background-color: #121212;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  
+  background-size: 20px 20px;
+  background-position: center;
+  padding: 100px 20px;
+  color: white;
+  text-align: center;
+  position: relative;
+}
+
+.hero-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  padding: 60px 20px;
+  text-align: center;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center; 
+}
+
+.hero-title {
+  font-size: 4rem;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+
+
+.hero-divider {
+  width: 300px;
+  height: 6px;
+  background-color: #6ec1c2;
+  margin: 20px auto;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.hero-subtext {
+  margin-top: 15px;
+  font-size: 1rem;
+  opacity: 0.85;
+}
+
+
+body {
+  background-color: #121212;
+  color: white;
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+
 .icon {
   width: 22px;
   height: 22px;
@@ -51,4 +106,54 @@
 .button-icon {
   height: 18px;
   width: 18px;
+}
+
+
+.CourseCard {
+  background-color: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.CourseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+/* Title inside card */
+.CourseCard h5 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+
+.btn-drop {
+  background-color: #6ec1c2;
+  color: black;
+  border: none;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.btn-drop:hover {
+  background-color: #58a9aa;
+}
+
+
+.course-search {
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  color: white;
+  padding: 10px;
+  border-radius: 6px;
+  width: 100%;
+}
+
+.course-search::placeholder {
+  color: #aaa;
 }

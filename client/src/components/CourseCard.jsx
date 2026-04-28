@@ -11,9 +11,14 @@ function CourseCard({ course, onDrop }) {
         <Card.Text>
           Instructor: {course.instructor}
         </Card.Text>
-        <Button variant="danger" onClick={() => onDrop(course.id)}>
-          Drop Course
-        </Button>
+
+        <Button
+  className="btn-drop"
+  onClick={() => onDrop && onDrop(course.id)}
+>
+  Drop Course
+</Button>
+
       </Card.Body>
     </Card>
   );
