@@ -10,6 +10,7 @@ import CourseDetailPage from './pages/CourseDetailPage';
 import NewCoursePage from './pages/NewCoursePage';
 import EditCoursePage from './pages/EditCoursePage';
 import SchedulePage from './pages/SchedulePage';
+import './App.css';
 
 export default function App() {
   return (
