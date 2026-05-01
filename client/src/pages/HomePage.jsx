@@ -6,6 +6,7 @@ import SearchBar from '../components/SearchBar';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Hero from "../components/Hero";
 
+
 export default function Courses() {
   const { courses } = useCourses();
   const [search, setSearch] = useState('');
