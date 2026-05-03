@@ -3,6 +3,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const connectDB = require('./db');
 const courseRoutes = require('./routes/courseRoutes');
+const authRoutes = require('./routes/authRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -19,6 +20,9 @@ app.get('/', (req, res) => {
 
 // Course API routes
 app.use('/api', courseRoutes);
+
+// Authentication routes
+app.use('/api/auth', authRoutes);
 
 connectDB()
   .then(() => {
