@@ -4,9 +4,17 @@ import { useAuth } from '../context/AuthContext';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
-  const courseId = Number(id);
-  const { getCourseById, deleteCourse } = useCourses();
-  const { user, addCourse: addCourseToSchedule } = useAuth();
+  const courseId = id;
+  const {
+    getCourseById,
+    deleteCourse,
+    dropCourse,
+    addToCart,
+    removeFromCart,
+    isEnrolled,
+    isInCart,
+  } = useCourses();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const course = getCourseById(courseId);
@@ -23,87 +31,155 @@ export default function CourseDetailPage() {
     );
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     const confirmed = window.confirm(
       `Delete "${course.name}"? This cannot be undone.`
     );
     if (!confirmed) return;
-    deleteCourse(courseId);
-    navigate('/');
+    try {
+      await deleteCourse(courseId);
+      navigate('/');
+    } catch (error) {
+      window.alert(error.message);
+    }
   }
 
-  const isInSchedule = user?.schedule.includes(courseId);
+  function handleAddToCart() {
+    addToCart(courseId);
+  }
+
+  async function handleDrop() {
+    try {
+      await dropCourse(courseId);
+    } catch (error) {
+      window.alert(error.message);
+    }
+  }
+
+  const isProfessor = user?.role === 'professor';
+  const isStudent = user?.role === 'student';
+  const isInSchedule = isEnrolled(course);
+  const courseIsInCart = isInCart(courseId);
+  const professorName = course.professor?.name || course.professor?.email || 'Unassigned';
 
   return (
-    <div className="container py-5">
-      <Link to="/" className="text-decoration-none text-muted small">
-        &larr; Back to courses
-      </Link>
+    <div className="course-detail-page py-5">
+      <div className="container">
+        <Link to="/" className="course-detail-back">
+          &larr; Back to courses
+        </Link>
 
-      <div className="d-flex justify-content-between align-items-start mt-2 mb-4 flex-wrap gap-3">
-        <div>
-          <h1 className="mb-2">{course.name}</h1>
-          <div>
-            {course.courseNumber && (
-              <span className="badge bg-secondary me-2">{course.courseNumber}</span>
+        <section className="course-detail-shell mt-3">
+          <div className="course-detail-header">
+            <div>
+              <p className="course-detail-eyebrow mb-2">{course.subject || 'Course Catalog'}</p>
+              <h1>{course.name}</h1>
+              <div className="course-detail-badges">
+                {course.courseNumber && (
+                  <span>{course.courseNumber}</span>
+                )}
+                <span>{course.credits} credit{course.credits !== 1 ? 's' : ''}</span>
+                {course.crn && (
+                  <span>CRN {course.crn}</span>
+                )}
+              </div>
+            </div>
+
+            {isProfessor && (
+              <div className="course-detail-actions">
+                <Link
+                  to={`/courses/${courseId}/edit`}
+                  className="btn btn-outline-secondary btn-sm"
+                >
+                  Edit
+                </Link>
+                <button
+                  type="button"
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={handleDelete}
+                >
+                  Delete
+                </button>
+              </div>
             )}
-            {course.subject && (
-              <span className="badge bg-info text-dark me-2">{course.subject}</span>
-            )}
-            <span className="badge bg-primary">
-              {course.credits} credit{course.credits !== 1 ? 's' : ''}
-            </span>
           </div>
-        </div>
 
-        {/* Teacher actions. In Stage 2 these will only show for the teacher
-            who owns the course. */}
-        <div className="d-flex gap-2">
-          <Link
-            to={`/courses/${courseId}/edit`}
-            className="btn btn-outline-secondary btn-sm"
-          >
-            Edit
-          </Link>
-          <button
-            type="button"
-            className="btn btn-outline-danger btn-sm"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </div>
+          <div className="course-detail-grid">
+            <section className="course-detail-panel course-detail-description">
+              <h2>Description</h2>
+              <p>{course.description}</p>
+            </section>
+
+            <aside className="course-detail-panel">
+              <h2>Course Info</h2>
+              <dl className="course-detail-meta">
+                <div>
+                  <dt>Professor</dt>
+                  <dd>{professorName}</dd>
+                </div>
+                <div>
+                  <dt>Subject</dt>
+                  <dd>{course.subject || '-'}</dd>
+                </div>
+                <div>
+                  <dt>Course Number</dt>
+                  <dd>{course.courseNumber || '-'}</dd>
+                </div>
+                <div>
+                  <dt>CRN</dt>
+                  <dd>{course.crn || '-'}</dd>
+                </div>
+                <div>
+                  <dt>Credits</dt>
+                  <dd>{course.credits ?? '-'}</dd>
+                </div>
+              </dl>
+            </aside>
+          </div>
+
+          {isStudent && (
+            <section className="course-detail-register">
+              <div>
+                <h2>Registration</h2>
+                <p>
+                  {isInSchedule
+                    ? 'You are enrolled in this course.'
+                    : courseIsInCart
+                      ? 'This course is waiting in your registration cart.'
+                      : 'Add this course to your cart before submitting registration.'}
+                </p>
+              </div>
+
+              {isInSchedule ? (
+                <button type="button" className="btn btn-outline-danger" onClick={handleDrop}>
+                  Drop Course
+                </button>
+              ) : courseIsInCart ? (
+                <div className="d-flex gap-2 flex-wrap">
+                  <Link to="/cart" className="btn btn-success">
+                    View Registration Cart
+                  </Link>
+                  <button
+                    type="button"
+                    className="btn btn-outline-secondary"
+                    onClick={() => removeFromCart(courseId)}
+                  >
+                    Remove from Cart
+                  </button>
+                </div>
+              ) : (
+                <button
+                  type="button"
+                  className="btn btn-teal"
+                  onClick={handleAddToCart}
+                >
+                  Add to Registration Cart
+                </button>
+              )}
+            </section>
+          )}
+        </section>
       </div>
-
-      <div className="card mb-4">
-        <div className="card-body">
-          <h5 className="card-title">Description</h5>
-          <p className="card-text mb-0" style={{ whiteSpace: 'pre-wrap' }}>
-            {course.description}
-          </p>
-        </div>
-      </div>
-
-      {course.crn && (
-        <p className="text-muted small mb-4">CRN: {course.crn}</p>
-      )}
-
-      {/* Student "add to schedule" action, only visible when signed in. */}
-      {user && (
-        isInSchedule ? (
-          <button type="button" className="btn btn-success" disabled>
-            &#10003; Added to your schedule
-          </button>
-        ) : (
-          <button
-            type="button"
-            className="btn btn-primary"
-            onClick={() => addCourseToSchedule(courseId)}
-          >
-            Add to Schedule
-          </button>
-        )
-      )}
     </div>
   );
 }

@@ -1,15 +1,47 @@
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 
 const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); // null means not logged in
-  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  const [authLoading, setAuthLoading] = useState(true);
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://sdev-255-final-project-group2.onrender.com';
 
   // -----------------------------------------------------------------
   // Replace mock auth calls with real backend API requests.
   // The rest of the app does not need to change.
   // -----------------------------------------------------------------
+
+  useEffect(() => {
+    async function restoreSession() {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        setAuthLoading(false);
+        return;
+      }
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/status`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          localStorage.removeItem('authToken');
+          setUser(null);
+          return;
+        }
+
+        setUser(data.user);
+      } catch {
+        setUser(null);
+      } finally {
+        setAuthLoading(false);
+      }
+    }
+
+    restoreSession();
+  }, [API_BASE_URL]);
 
   async function login(email, password) {
     if (!email || !password) {
@@ -80,22 +112,8 @@ export function AuthProvider({ children }) {
     localStorage.removeItem('authToken');
   }
 
-  function addCourse(courseId) {
-    if (!user) return;
-    if (user.schedule.includes(courseId)) return; // prevent duplicates
-    setUser(prev => ({ ...prev, schedule: [...prev.schedule, courseId] }));
-  }
-
-  function removeCourse(courseId) {
-    if (!user) return;
-    setUser(prev => ({
-      ...prev,
-      schedule: prev.schedule.filter(id => id !== courseId),
-    }));
-  }
-
   return (
-    <AuthContext.Provider value={{ user, login, logout, register, addCourse, removeCourse }}>
+    <AuthContext.Provider value={{ user, authLoading, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

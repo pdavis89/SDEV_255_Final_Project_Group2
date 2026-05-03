@@ -10,6 +10,7 @@ import CourseDetailPage from './pages/CourseDetailPage';
 import NewCoursePage from './pages/NewCoursePage';
 import EditCoursePage from './pages/EditCoursePage';
 import SchedulePage from './pages/SchedulePage';
+import CartPage from './pages/CartPage';
 import './App.css';
 
 export default function App() {
@@ -22,14 +23,36 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/courses/new" element={<NewCoursePage />} />
+            <Route
+              path="/courses/new"
+              element={
+                <ProtectedRoute allowedRoles={['professor']}>
+                  <NewCoursePage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/courses/:id" element={<CourseDetailPage />} />
-            <Route path="/courses/:id/edit" element={<EditCoursePage />} />
+            <Route
+              path="/courses/:id/edit"
+              element={
+                <ProtectedRoute allowedRoles={['professor']}>
+                  <EditCoursePage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/schedule"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['student']}>
                   <SchedulePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <CartPage />
                 </ProtectedRoute>
               }
             />

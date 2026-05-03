@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 // Shared form for both creating and editing a course.
@@ -12,18 +12,72 @@ export default function CourseForm({
   submitLabel = 'Save',
   cancelTo = '/',
 }) {
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://sdev-255-final-project-group2.onrender.com';
+  const initialProfessorId = initialValues?.professor?.id || initialValues?.professor?._id || initialValues?.professor || '';
   const [form, setForm] = useState(
-    initialValues ?? {
+    initialValues ? {
+      ...initialValues,
+      professor: initialProfessorId,
+    } : {
       name: '',
       courseNumber: '',
       subject: '',
       credits: 3,
       description: '',
       crn: '',
+      professor: '',
     }
   );
+  const [professors, setProfessors] = useState([]);
+  const [professorsLoading, setProfessorsLoading] = useState(true);
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    let ignore = false;
+
+    async function loadProfessors() {
+      const token = localStorage.getItem('authToken');
+
+      try {
+        const res = await fetch(`${API_BASE_URL}/api/auth/professors`, {
+          headers: {
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.message || 'Failed to load professors.');
+        }
+
+        if (!ignore) {
+          const loadedProfessors = data.professors || [];
+          setProfessors(loadedProfessors);
+
+          if (loadedProfessors.length > 0) {
+            setForm(prev => (
+              prev.professor ? prev : { ...prev, professor: loadedProfessors[0].id }
+            ));
+          }
+        }
+      } catch (loadError) {
+        if (!ignore) {
+          setError(loadError.message);
+        }
+      } finally {
+        if (!ignore) {
+          setProfessorsLoading(false);
+        }
+      }
+    }
+
+    loadProfessors();
+
+    return () => {
+      ignore = true;
+    };
+  }, [API_BASE_URL]);
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -36,8 +90,11 @@ export default function CourseForm({
 
     // Required-field validation
     if (!form.name.trim()) return setError('Course name is required.');
+    if (!form.courseNumber.trim()) return setError('Course number is required.');
     if (!form.subject.trim()) return setError('Subject area is required.');
     if (!form.description.trim()) return setError('Description is required.');
+    if (!form.crn.trim()) return setError('CRN is required.');
+    if (!form.professor) return setError('Professor is required.');
 
     const credits = Number(form.credits);
     if (!Number.isFinite(credits) || credits < 1 || credits > 6) {
@@ -53,7 +110,10 @@ export default function CourseForm({
         credits,
         description: form.description.trim(),
         crn: form.crn.trim(),
+        professor: form.professor,
       });
+    } catch (submitError) {
+      setError(submitError.message || 'Unable to save course.');
     } finally {
       setSubmitting(false);
     }
@@ -80,6 +140,27 @@ export default function CourseForm({
         />
       </div>
 
+      <div className="mb-3">
+        <label htmlFor="professor" className="form-label">Professor</label>
+        <select
+          id="professor"
+          name="professor"
+          className="form-control"
+          value={form.professor}
+          onChange={handleChange}
+          disabled={professorsLoading}
+        >
+          <option value="">
+            {professorsLoading ? 'Loading professors...' : 'Select a professor'}
+          </option>
+          {professors.map(professor => (
+            <option key={professor.id} value={professor.id}>
+              {professor.name || professor.email}
+            </option>
+          ))}
+        </select>
+      </div>
+
       <div className="row">
         <div className="col-md-6 mb-3">
           <label htmlFor="courseNumber" className="form-label">Course Number</label>
@@ -95,7 +176,7 @@ export default function CourseForm({
         </div>
         <div className="col-md-6 mb-3">
           <label htmlFor="crn" className="form-label">
-            CRN <span className="text-muted small">(optional)</span>
+            CRN
           </label>
           <input
             id="crn"

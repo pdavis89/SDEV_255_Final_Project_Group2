@@ -5,7 +5,7 @@ import Hero from '../components/Hero';
 
 export default function EditCoursePage() {
   const { id } = useParams();
-  const courseId = Number(id);
+  const courseId = id;
   const { getCourseById, updateCourse } = useCourses();
   const navigate = useNavigate();
 
@@ -24,8 +24,8 @@ export default function EditCoursePage() {
     );
   }
 
-  function handleSubmit(data) {
-    updateCourse(courseId, data);
+  async function handleSubmit(data) {
+    await updateCourse(courseId, data);
     navigate(`/courses/${courseId}`);
   }
 

@@ -145,9 +145,25 @@ async function logout(req, res) {
   }
 }
 
+async function getProfessors(req, res) {
+  try {
+    const professors = await User.find({ role: 'professor' })
+      .select('name email role')
+      .sort({ name: 1, email: 1 });
+
+    res.json({
+      success: true,
+      professors: professors.map(sanitizeUser),
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Failed to load professors.', error: error.message });
+  }
+}
+
 module.exports = {
   register,
   login,
   status,
   logout,
+  getProfessors,
 };
