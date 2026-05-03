@@ -7,8 +7,8 @@ export default function NewCoursePage() {
   const { addCourse } = useCourses();
   const navigate = useNavigate();
 
-  function handleSubmit(data) {
-    const created = addCourse(data);
+  async function handleSubmit(data) {
+    const created = await addCourse(data);
     // Send the user to the new course's detail page so they can see the result.
     navigate(`/courses/${created.id}`);
   }

@@ -36,8 +36,10 @@ export default function CourseForm({
 
     // Required-field validation
     if (!form.name.trim()) return setError('Course name is required.');
+    if (!form.courseNumber.trim()) return setError('Course number is required.');
     if (!form.subject.trim()) return setError('Subject area is required.');
     if (!form.description.trim()) return setError('Description is required.');
+    if (!form.crn.trim()) return setError('CRN is required.');
 
     const credits = Number(form.credits);
     if (!Number.isFinite(credits) || credits < 1 || credits > 6) {
@@ -54,6 +56,8 @@ export default function CourseForm({
         description: form.description.trim(),
         crn: form.crn.trim(),
       });
+    } catch (submitError) {
+      setError(submitError.message || 'Unable to save course.');
     } finally {
       setSubmitting(false);
     }
@@ -95,7 +99,7 @@ export default function CourseForm({
         </div>
         <div className="col-md-6 mb-3">
           <label htmlFor="crn" className="form-label">
-            CRN <span className="text-muted small">(optional)</span>
+            CRN
           </label>
           <input
             id="crn"

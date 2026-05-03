@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useCourses } from '../context/CoursesContext';
+import { useAuth } from '../context/AuthContext';
 import CourseCard from '../components/CourseCard';
 import SearchBar from '../components/SearchBar';
 import { Container, Row, Col, Button } from 'react-bootstrap';
@@ -8,14 +9,15 @@ import Hero from "../components/Hero";
 
 
 export default function Courses() {
-  const { courses } = useCourses();
+  const { courses, loading, error } = useCourses();
+  const { user } = useAuth();
   const [search, setSearch] = useState('');
 
   const filtered = courses.filter(course => {
     const q = search.toLowerCase();
     return (
       course.name.toLowerCase().includes(q) ||
-      (course.code && course.code.toLowerCase().includes(q))
+      (course.courseNumber && course.courseNumber.toLowerCase().includes(q))
     );
   });
 
@@ -29,10 +31,10 @@ export default function Courses() {
       />
 
       <div className="home-cta-row container my-4 d-flex flex-wrap gap-3 justify-content-center">
-        <Link to="/courses" className="btn btn-teal btn-lg">Browse Courses</Link>
-        <Link to="/register" className="btn btn-teal btn-lg">Register Now</Link>
-        <Link to="/login" className="btn btn-teal btn-lg">Login</Link>
-        <Link to="/schedule" className="btn btn-teal btn-lg">Manage Schedule</Link>
+        {!user && <Link to="/register" className="btn btn-teal btn-lg">Register Now</Link>}
+        {!user && <Link to="/login" className="btn btn-teal btn-lg">Login</Link>}
+        {user?.role === 'student' && <Link to="/schedule" className="btn btn-teal btn-lg">Manage Schedule</Link>}
+        {user?.role === 'professor' && <Link to="/courses/new" className="btn btn-teal btn-lg">Create Course</Link>}
       </div>
 
       <div className="home-content py-4">
@@ -45,9 +47,11 @@ export default function Courses() {
               </p>
             </div>
 
-            <Link to="/courses/new">
-              <Button className="btn btn-teal px-4">+ Add Course</Button>
-            </Link>
+            {user?.role === 'professor' && (
+              <Link to="/courses/new">
+                <Button className="btn btn-teal px-4">+ Add Course</Button>
+              </Link>
+            )}
           </div>
         </Container>
 
@@ -55,14 +59,24 @@ export default function Courses() {
           <SearchBar value={search} onChange={setSearch} />
         </Container>
 
-        {filtered.length === 0 ? (
+        {loading ? (
+        <div className="text-center py-5">
+          <p className="text-muted mb-0">Loading courses...</p>
+        </div>
+      ) : error ? (
+        <div className="text-center py-5">
+          <p className="text-muted mb-0">{error}</p>
+        </div>
+      ) : filtered.length === 0 ? (
         <div className="text-center py-5">
           {courses.length === 0 ? (
             <>
               <p className="text-muted mb-3">No courses have been added yet.</p>
-              <Link to="/courses/new" className="add-course-btn">
-                Add the first course
-              </Link>
+              {user?.role === 'professor' && (
+                <Link to="/courses/new" className="add-course-btn">
+                  Add the first course
+                </Link>
+              )}
             </>
           ) : (
             <>

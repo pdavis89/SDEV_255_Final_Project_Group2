@@ -4,9 +4,9 @@ import { useAuth } from '../context/AuthContext';
 
 export default function CourseDetailPage() {
   const { id } = useParams();
-  const courseId = Number(id);
-  const { getCourseById, deleteCourse } = useCourses();
-  const { user, addCourse: addCourseToSchedule } = useAuth();
+  const courseId = id;
+  const { getCourseById, deleteCourse, enrollInCourse, dropCourse, isEnrolled } = useCourses();
+  const { user } = useAuth();
   const navigate = useNavigate();
 
   const course = getCourseById(courseId);
@@ -23,16 +23,39 @@ export default function CourseDetailPage() {
     );
   }
 
-  function handleDelete() {
+  async function handleDelete() {
     const confirmed = window.confirm(
       `Delete "${course.name}"? This cannot be undone.`
     );
     if (!confirmed) return;
-    deleteCourse(courseId);
-    navigate('/');
+    try {
+      await deleteCourse(courseId);
+      navigate('/');
+    } catch (error) {
+      window.alert(error.message);
+    }
   }
 
-  const isInSchedule = user?.schedule.includes(courseId);
+  async function handleEnroll() {
+    try {
+      await enrollInCourse(courseId);
+    } catch (error) {
+      window.alert(error.message);
+    }
+  }
+
+  async function handleDrop() {
+    try {
+      await dropCourse(courseId);
+    } catch (error) {
+      window.alert(error.message);
+    }
+  }
+
+  const professorId = course.professor?.id || course.professor?._id || course.professor;
+  const isProfessorOwner = user?.role === 'professor' && professorId === user.id;
+  const isStudent = user?.role === 'student';
+  const isInSchedule = isEnrolled(course);
 
   return (
     <div className="container py-5">
@@ -56,23 +79,23 @@ export default function CourseDetailPage() {
           </div>
         </div>
 
-        {/* Teacher actions. In Stage 2 these will only show for the teacher
-            who owns the course. */}
-        <div className="d-flex gap-2">
-          <Link
-            to={`/courses/${courseId}/edit`}
-            className="btn btn-outline-secondary btn-sm"
-          >
-            Edit
-          </Link>
-          <button
-            type="button"
-            className="btn btn-outline-danger btn-sm"
-            onClick={handleDelete}
-          >
-            Delete
-          </button>
-        </div>
+        {isProfessorOwner && (
+          <div className="d-flex gap-2">
+            <Link
+              to={`/courses/${courseId}/edit`}
+              className="btn btn-outline-secondary btn-sm"
+            >
+              Edit
+            </Link>
+            <button
+              type="button"
+              className="btn btn-outline-danger btn-sm"
+              onClick={handleDelete}
+            >
+              Delete
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="card mb-4">
@@ -88,19 +111,24 @@ export default function CourseDetailPage() {
         <p className="text-muted small mb-4">CRN: {course.crn}</p>
       )}
 
-      {/* Student "add to schedule" action, only visible when signed in. */}
-      {user && (
+      {course.professor && (
+        <p className="text-muted small mb-4">
+          Professor: {course.professor.name || course.professor.email}
+        </p>
+      )}
+
+      {isStudent && (
         isInSchedule ? (
-          <button type="button" className="btn btn-success" disabled>
-            &#10003; Added to your schedule
+          <button type="button" className="btn btn-outline-danger" onClick={handleDrop}>
+            Drop Course
           </button>
         ) : (
           <button
             type="button"
             className="btn btn-primary"
-            onClick={() => addCourseToSchedule(courseId)}
+            onClick={handleEnroll}
           >
-            Add to Schedule
+            Enroll in Course
           </button>
         )
       )}

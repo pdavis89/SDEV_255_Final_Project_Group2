@@ -22,13 +22,27 @@ export default function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
-            <Route path="/courses/new" element={<NewCoursePage />} />
+            <Route
+              path="/courses/new"
+              element={
+                <ProtectedRoute allowedRoles={['professor']}>
+                  <NewCoursePage />
+                </ProtectedRoute>
+              }
+            />
             <Route path="/courses/:id" element={<CourseDetailPage />} />
-            <Route path="/courses/:id/edit" element={<EditCoursePage />} />
+            <Route
+              path="/courses/:id/edit"
+              element={
+                <ProtectedRoute allowedRoles={['professor']}>
+                  <EditCoursePage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/schedule"
               element={
-                <ProtectedRoute>
+                <ProtectedRoute allowedRoles={['student']}>
                   <SchedulePage />
                 </ProtectedRoute>
               }

@@ -26,8 +26,11 @@ function Navbar() {
         <BsNavbar.Collapse id="navbarScroll">
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
             <Nav.Link as={NavLink} to="/">Home</Nav.Link>
-            {user && (
+            {user?.role === 'student' && (
               <Nav.Link as={NavLink} to="/schedule">My Schedule</Nav.Link>
+            )}
+            {user?.role === 'professor' && (
+              <Nav.Link as={NavLink} to="/courses/new">Create Course</Nav.Link>
             )}
           </Nav>
           <Nav>
