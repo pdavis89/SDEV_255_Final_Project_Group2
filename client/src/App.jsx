@@ -10,6 +10,7 @@ import CourseDetailPage from './pages/CourseDetailPage';
 import NewCoursePage from './pages/NewCoursePage';
 import EditCoursePage from './pages/EditCoursePage';
 import SchedulePage from './pages/SchedulePage';
+import CartPage from './pages/CartPage';
 import './App.css';
 
 export default function App() {
@@ -44,6 +45,14 @@ export default function App() {
               element={
                 <ProtectedRoute allowedRoles={['student']}>
                   <SchedulePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/cart"
+              element={
+                <ProtectedRoute allowedRoles={['student']}>
+                  <CartPage />
                 </ProtectedRoute>
               }
             />

@@ -4,10 +4,13 @@ import Nav from 'react-bootstrap/Nav';
 import BsNavbar from 'react-bootstrap/Navbar';
 import brandLogo from '../assets/brand.png';
 import { useAuth } from '../context/AuthContext';
+import { useCourses } from '../context/CoursesContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const { cartCount } = useCourses();
   const displayName = user?.name || user?.email || 'there';
+  const roleLabel = user?.role === 'professor' ? 'Professor' : 'Student';
 
   return (
     <BsNavbar expand="lg" className="bg-body-tertiary" sticky="top">
@@ -27,7 +30,12 @@ function Navbar() {
           <Nav className="me-auto my-2 my-lg-0" navbarScroll>
             <Nav.Link as={NavLink} to="/">Home</Nav.Link>
             {user?.role === 'student' && (
-              <Nav.Link as={NavLink} to="/schedule">My Schedule</Nav.Link>
+              <>
+                <Nav.Link as={NavLink} to="/cart">
+                  Cart{cartCount > 0 ? ` (${cartCount})` : ''}
+                </Nav.Link>
+                <Nav.Link as={NavLink} to="/schedule">My Schedule</Nav.Link>
+              </>
             )}
             {user?.role === 'professor' && (
               <Nav.Link as={NavLink} to="/courses/new">Create Course</Nav.Link>
@@ -37,6 +45,9 @@ function Navbar() {
             {user ? (
               <>
                 <span className="navbar-text me-3">Hi, {displayName}</span>
+                <span className="badge bg-info text-dark align-self-center me-3">
+                  {roleLabel}
+                </span>
                 <button
                   type="button"
                   className="btn btn-outline-secondary btn-sm"

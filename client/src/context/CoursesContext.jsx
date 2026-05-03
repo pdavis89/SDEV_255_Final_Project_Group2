@@ -6,6 +6,7 @@ const CoursesContext = createContext(null);
 export function CoursesProvider({ children }) {
   const { user } = useAuth();
   const [courses, setCourses] = useState([]);
+  const [cartCourseIds, setCartCourseIds] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
@@ -159,6 +160,21 @@ export function CoursesProvider({ children }) {
     return updated;
   }
 
+  function addToCart(courseId) {
+    setCartCourseIds(prev => {
+      if (prev.includes(courseId)) return prev;
+      return [...prev, courseId];
+    });
+  }
+
+  function removeFromCart(courseId) {
+    setCartCourseIds(prev => prev.filter(id => id !== courseId));
+  }
+
+  function clearCart() {
+    setCartCourseIds([]);
+  }
+
   function getCourseById(id) {
     return courses.find(c => c.id === id);
   }
@@ -175,6 +191,31 @@ export function CoursesProvider({ children }) {
     return courses.filter(course => isEnrolled(course));
   }
 
+  function isInCart(courseId) {
+    return cartCourseIds.includes(courseId);
+  }
+
+  function getCartCourses() {
+    return cartCourseIds
+      .map(courseId => getCourseById(courseId))
+      .filter(Boolean);
+  }
+
+  async function checkoutCart() {
+    const cartCourses = getCartCourses();
+    const results = [];
+
+    for (const course of cartCourses) {
+      if (!isEnrolled(course)) {
+        const updated = await enrollInCourse(course.id);
+        results.push(updated);
+      }
+    }
+
+    clearCart();
+    return results;
+  }
+
   return (
     <CoursesContext.Provider
       value={{
@@ -187,9 +228,16 @@ export function CoursesProvider({ children }) {
         deleteCourse,
         enrollInCourse,
         dropCourse,
+        addToCart,
+        removeFromCart,
+        clearCart,
+        checkoutCart,
         getCourseById,
         getStudentSchedule,
+        getCartCourses,
         isEnrolled,
+        isInCart,
+        cartCount: cartCourseIds.length,
       }}
     >
       {children}
