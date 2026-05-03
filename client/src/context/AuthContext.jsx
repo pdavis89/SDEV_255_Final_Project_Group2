@@ -4,59 +4,72 @@ const AuthContext = createContext(null);
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null); // null means not logged in
+  const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
   // -----------------------------------------------------------------
-  // When backend is ready, replace the mock logic inside each
-  // function with a real fetch() call to Express API.
+  // Replace mock auth calls with real backend API requests.
   // The rest of the app does not need to change.
   // -----------------------------------------------------------------
 
   async function login(username, password) {
-    // TODO: replace with ->
-    // const res = await fetch('/api/auth/login', {
-    //   method: 'POST',
-    //   credentials: 'include',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ username, password }),
-    // });
-    // const data = await res.json();
-    // if (!res.ok) return { success: false, message: data.message };
-    // setUser(data.user);
-    // return { success: true };
-
-    // Mock: accepts any non-empty username + password
     if (!username || !password) {
       return { success: false, message: 'Invalid credentials.' };
     }
-    setUser({ id: 1, username, schedule: [] });
+
+    const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: username, password }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      return { success: false, message: data.message || 'Login failed.' };
+    }
+
+    setUser(data.user);
+    localStorage.setItem('authToken', data.token);
     return { success: true };
   }
 
   async function register(username, password) {
-    // TODO: replace with ->
-    // const res = await fetch('/api/auth/register', {
-    //   method: 'POST',
-    //   credentials: 'include',
-    //   headers: { 'Content-Type': 'application/json' },
-    //   body: JSON.stringify({ username, password }),
-    // });
-    // const data = await res.json();
-    // if (!res.ok) return { success: false, message: data.message };
-    // setUser(data.user);
-    // return { success: true };
-
-    // Mock: accepts any non-empty username + password
     if (!username || !password) {
       return { success: false, message: 'Please fill in all fields.' };
     }
-    setUser({ id: 1, username, schedule: [] });
+
+    const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        email: username,
+        password,
+        name: username,
+      }),
+    });
+
+    const data = await res.json();
+    if (!res.ok) {
+      return { success: false, message: data.message || 'Registration failed.' };
+    }
+
+    setUser(data.user);
+    localStorage.setItem('authToken', data.token);
     return { success: true };
   }
 
-  function logout() {
-    // TODO: add ->
-    // await fetch('/api/auth/logout', { method: 'POST', credentials: 'include' });
+  async function logout() {
+    try {
+      await fetch(`${API_BASE_URL}/api/auth/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}),
+      });
+    } catch (error) {
+      // ignore logout network failures and clear local state anyway
+    }
+
     setUser(null);
+    localStorage.removeItem('authToken');
   }
 
   function addCourse(courseId) {
