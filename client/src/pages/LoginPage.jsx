@@ -8,7 +8,7 @@ export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ username: '', password: '' });
+  const [form, setForm] = useState({ email: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -20,13 +20,13 @@ export default function LoginPage() {
     e.preventDefault();
     setError('');
 
-    if (!form.username || !form.password) {
+    if (!form.email || !form.password) {
       setError('Please fill in all fields.');
       return;
     }
 
     setLoading(true);
-    const result = await login(form.username, form.password);
+    const result = await login(form.email, form.password);
     setLoading(false);
 
     if (result.success) {
@@ -59,11 +59,11 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} noValidate>
 
           <input
-            type="text"
+            type="email"
             className="login-input"
-            name="username"
-            placeholder="Username"
-            value={form.username}
+            name="email"
+            placeholder="Email"
+            value={form.email}
             onChange={handleChange}
           />
 

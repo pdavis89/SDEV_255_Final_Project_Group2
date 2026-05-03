@@ -458,12 +458,45 @@ body {
   box-shadow: 0 4px 20px rgba(0,0,0,0.15);
 }
 
+.register-card label {
+  display: block;
+  margin: 0 0 6px;
+  font-weight: 600;
+  color: #08101c;
+}
+
 .register-input {
   width: 100%;
+  box-sizing: border-box;
+  display: block;
+  background-color: #ffffff;
+  color: #08101c;
   padding: 10px;
-  margin-bottom: 15px;
+  margin-bottom: 16px;
   border-radius: 6px;
   border: 1px solid #ccc;
+}
+
+.register-input:focus {
+  outline: none;
+  border-color: #4a9c9b;
+  box-shadow: 0 0 0 0.2rem rgba(110, 193, 194, 0.22);
+}
+
+.register-input:-webkit-autofill,
+.register-input:-webkit-autofill:hover,
+.register-input:-webkit-autofill:focus {
+  -webkit-text-fill-color: #08101c;
+  box-shadow: 0 0 0 1000px #ffffff inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.register-help-text {
+  display: block;
+  margin: -10px 0 16px;
+  color: rgba(8, 16, 28, 0.68);
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .register-card button {

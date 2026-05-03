@@ -11,15 +11,15 @@ export function AuthProvider({ children }) {
   // The rest of the app does not need to change.
   // -----------------------------------------------------------------
 
-  async function login(username, password) {
-    if (!username || !password) {
+  async function login(email, password) {
+    if (!email || !password) {
       return { success: false, message: 'Invalid credentials.' };
     }
 
     const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email: username, password }),
+      body: JSON.stringify({ email, password }),
     });
 
     const data = await res.json();
@@ -32,8 +32,10 @@ export function AuthProvider({ children }) {
     return { success: true };
   }
 
-  async function register(username, password) {
-    if (!username || !password) {
+  async function register(email, password, role = 'student', firstName = '', lastName = '') {
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+
+    if (!email || !password || !fullName) {
       return { success: false, message: 'Please fill in all fields.' };
     }
 
@@ -41,9 +43,10 @@ export function AuthProvider({ children }) {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        email: username,
+        email,
         password,
-        name: username,
+        name: fullName,
+        role,
       }),
     });
 
@@ -58,13 +61,18 @@ export function AuthProvider({ children }) {
   }
 
   async function logout() {
+    const token = localStorage.getItem('authToken');
+
     try {
       await fetch(`${API_BASE_URL}/api/auth/logout`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
         body: JSON.stringify({}),
       });
-    } catch (error) {
+    } catch {
       // ignore logout network failures and clear local state anyway
     }
 

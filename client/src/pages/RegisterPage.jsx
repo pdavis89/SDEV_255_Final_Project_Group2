@@ -7,7 +7,15 @@ export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
 
-  const [form, setForm] = useState({ username: '', password: '', confirm: '' });
+  const [form, setForm] = useState({
+    firstName: '',
+    lastName: '',
+    email: '',
+    password: '',
+    confirm: '',
+    role: 'student',
+  });
+
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -19,7 +27,7 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
 
-    if (!form.username || !form.password || !form.confirm) {
+    if (!form.firstName.trim() || !form.lastName.trim() || !form.email || !form.password || !form.confirm) {
       setError('Please fill in all fields.');
       return;
     }
@@ -33,7 +41,13 @@ export default function RegisterPage() {
     }
 
     setLoading(true);
-    const result = await register(form.username, form.password);
+    const result = await register(
+      form.email,
+      form.password,
+      form.role,
+      form.firstName,
+      form.lastName
+    );
     setLoading(false);
 
     if (result.success) {
@@ -68,12 +82,30 @@ export default function RegisterPage() {
 
         <form onSubmit={handleSubmit} noValidate>
 
-          <label>Username</label>
+          <label>First Name</label>
           <input
             type="text"
             className="register-input"
-            name="username"
-            value={form.username}
+            name="firstName"
+            value={form.firstName}
+            onChange={handleChange}
+          />
+
+          <label>Last Name</label>
+          <input
+            type="text"
+            className="register-input"
+            name="lastName"
+            value={form.lastName}
+            onChange={handleChange}
+          />
+
+          <label>Email</label>
+          <input
+            type="email"
+            className="register-input"
+            name="email"
+            value={form.email}
             onChange={handleChange}
           />
 
@@ -85,7 +117,7 @@ export default function RegisterPage() {
             value={form.password}
             onChange={handleChange}
           />
-          <small>Minimum 6 characters</small>
+          <small className="register-help-text">Minimum 6 characters</small>
 
           <label>Confirm Password</label>
           <input
@@ -95,6 +127,17 @@ export default function RegisterPage() {
             value={form.confirm}
             onChange={handleChange}
           />
+
+          <label>Role</label>
+          <select
+            className="register-input"
+            name="role"
+            value={form.role}
+            onChange={handleChange}
+          >
+            <option value="student">Student</option>
+            <option value="professor">Professor</option>
+          </select>
 
           <button
             type="submit"

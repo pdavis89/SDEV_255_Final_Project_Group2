@@ -7,6 +7,7 @@ import { useAuth } from '../context/AuthContext';
 
 function Navbar() {
   const { user, logout } = useAuth();
+  const displayName = user?.name || user?.email || 'there';
 
   return (
     <BsNavbar expand="lg" className="bg-body-tertiary" sticky="top">
@@ -32,7 +33,7 @@ function Navbar() {
           <Nav>
             {user ? (
               <>
-                <span className="navbar-text me-3">Hi, {user.username}</span>
+                <span className="navbar-text me-3">Hi, {displayName}</span>
                 <button
                   type="button"
                   className="btn btn-outline-secondary btn-sm"
