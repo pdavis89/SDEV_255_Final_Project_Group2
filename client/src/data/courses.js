@@ -1,6 +1,4 @@
-// Seed data for the course list. The live list is owned by CoursesContext,
-// so the rest of the app imports from the context (not from here).
-// In Stage 2 this file goes away — courses will come from the Express/Mongo API.
+// old seed data kept for reference
 export const initialCourses = [
   {
     id: 1,

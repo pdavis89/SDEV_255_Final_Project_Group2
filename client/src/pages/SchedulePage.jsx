@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
 import { useCourses } from '../context/CoursesContext';
 
+// shows the student's enrolled courses
 export default function SchedulePage() {
   const { getStudentSchedule, dropCourse } = useCourses();
   const scheduledCourses = getStudentSchedule();
 
+  // drops a course from the student's schedule
   async function handleDrop(courseId) {
     try {
       await dropCourse(courseId);

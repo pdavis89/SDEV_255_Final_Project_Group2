@@ -1,3 +1,4 @@
+// shows the large page banner
 export default function Hero({ title, subtitle, subtext }) {
   return (
     <div className="hero-container">

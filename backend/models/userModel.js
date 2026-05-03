@@ -35,6 +35,7 @@ const userSchema = new mongoose.Schema(
   }
 );
 
+// checks a plain password against the saved password hash
 userSchema.methods.comparePassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };

@@ -1,6 +1,7 @@
 import { Container, Row, Col } from 'react-bootstrap';
 import CourseCard from './CourseCard';
 
+// lays out course cards in a grid
 function CourseList({ courses, onDrop }) {
   return (
     <Container className="my-5">

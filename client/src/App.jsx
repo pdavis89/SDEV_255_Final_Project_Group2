@@ -13,6 +13,7 @@ import SchedulePage from './pages/SchedulePage';
 import CartPage from './pages/CartPage';
 import './App.css';
 
+// sets up providers, navigation, and routes
 export default function App() {
   return (
     <BrowserRouter basename="/SDEV_255_Final_Project_Group2/">

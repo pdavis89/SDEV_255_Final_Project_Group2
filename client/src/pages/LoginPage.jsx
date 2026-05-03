@@ -1,9 +1,9 @@
-// KEEP THIS PART
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Hero from '../components/Hero';
 
+// shows the sign in form
 export default function LoginPage() {
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -12,10 +12,12 @@ export default function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // updates form state when an input changes
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
+  // sends login credentials to auth context
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');

@@ -6,6 +6,7 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 const TOKEN_TTL_MS = 24 * 60 * 60 * 1000; // 24 hours
 const VALID_ROLES = ['professor', 'student'];
 
+// creates a login token for a user
 function createToken(user) {
   const payload = {
     id: user._id,
@@ -17,6 +18,7 @@ function createToken(user) {
   return jwt.encode(payload, JWT_SECRET);
 }
 
+// decodes a login token
 function parseToken(token) {
   if (!token) {
     throw new Error('No token provided');
@@ -24,12 +26,14 @@ function parseToken(token) {
   return jwt.decode(token, JWT_SECRET);
 }
 
+// gets the bearer token from the request header
 function getTokenFromHeader(req) {
   const authHeader = req.headers.authorization || '';
   const [scheme, token] = authHeader.split(' ');
   return scheme === 'Bearer' ? token : null;
 }
 
+// removes private fields before sending a user back
 function sanitizeUser(user) {
   return {
     id: user._id,
@@ -42,6 +46,7 @@ function sanitizeUser(user) {
   };
 }
 
+// creates a new user and logs them in
 async function register(req, res) {
   try {
     const { email, password, name, role } = req.body;
@@ -72,6 +77,7 @@ async function register(req, res) {
   }
 }
 
+// logs a user in and marks them online
 async function login(req, res) {
   try {
     const { email, password } = req.body;
@@ -100,6 +106,7 @@ async function login(req, res) {
   }
 }
 
+// checks the current token and returns the user
 async function status(req, res) {
   try {
     const token = getTokenFromHeader(req);
@@ -123,6 +130,7 @@ async function status(req, res) {
   }
 }
 
+// logs a user out and marks them offline
 async function logout(req, res) {
   try {
     const token = getTokenFromHeader(req);
@@ -145,6 +153,7 @@ async function logout(req, res) {
   }
 }
 
+// returns the professor list for course forms
 async function getProfessors(req, res) {
   try {
     const professors = await User.find({ role: 'professor' })

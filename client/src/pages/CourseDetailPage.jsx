@@ -2,6 +2,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useCourses } from '../context/CoursesContext';
 import { useAuth } from '../context/AuthContext';
 
+// shows full details for one course
 export default function CourseDetailPage() {
   const { id } = useParams();
   const courseId = id;
@@ -31,6 +32,7 @@ export default function CourseDetailPage() {
     );
   }
 
+  // deletes the course after confirming with the user
   async function handleDelete() {
     const confirmed = window.confirm(
       `Delete "${course.name}"? This cannot be undone.`
@@ -44,10 +46,12 @@ export default function CourseDetailPage() {
     }
   }
 
+  // adds the course to the registration cart
   function handleAddToCart() {
     addToCart(courseId);
   }
 
+  // drops the course from the student's schedule
   async function handleDrop() {
     try {
       await dropCourse(courseId);
