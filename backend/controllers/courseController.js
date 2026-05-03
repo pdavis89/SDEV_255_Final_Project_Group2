@@ -2,6 +2,7 @@ const Course = require('../models/courseModel');
 const User = require('../models/userModel');
 const mongoose = require('mongoose');
 
+// validates that the selected user is a professor
 async function getProfessorId(professorId) {
   if (!professorId || !mongoose.Types.ObjectId.isValid(professorId)) {
     return null;
@@ -11,7 +12,7 @@ async function getProfessorId(professorId) {
   return professor?._id || null;
 }
 
-// Fetch all courses from MongoDB and return them sorted by name.
+// gets all courses for the catalog
 async function getCourses(req, res) {
   try {
     const courses = await Course.find()
@@ -24,7 +25,7 @@ async function getCourses(req, res) {
   }
 }
 
-// Fetch a single course by its MongoDB document id.
+// gets one course by id
 async function getCourseById(req, res) {
   try {
     const course = await Course.findById(req.params.id)
@@ -41,7 +42,7 @@ async function getCourseById(req, res) {
   }
 }
 
-// Create a new course document in MongoDB from request body payload.
+// creates a course in mongodb
 async function createCourse(req, res) {
   try {
     const { name, courseNumber, subject, credits, description, crn, professor } = req.body;
@@ -77,7 +78,7 @@ async function createCourse(req, res) {
   }
 }
 
-// Update an existing course by id with the provided fields.
+// updates a course with the allowed fields
 async function updateCourse(req, res) {
   try {
     const allowedFields = ['name', 'courseNumber', 'subject', 'credits', 'description', 'crn', 'professor'];
@@ -117,7 +118,7 @@ async function updateCourse(req, res) {
   }
 }
 
-// Delete a course from MongoDB by its id.
+// deletes a course by id
 async function deleteCourse(req, res) {
   try {
     const course = await Course.findById(req.params.id);
@@ -133,6 +134,7 @@ async function deleteCourse(req, res) {
   }
 }
 
+// enrolls the current student in a course
 async function enrollInCourse(req, res) {
   try {
     const course = await Course.findById(req.params.id);
@@ -155,6 +157,7 @@ async function enrollInCourse(req, res) {
   }
 }
 
+// removes the current student from a course
 async function dropCourse(req, res) {
   try {
     const course = await Course.findById(req.params.id);
@@ -173,6 +176,7 @@ async function dropCourse(req, res) {
   }
 }
 
+// gets the current student's enrolled courses
 async function getMySchedule(req, res) {
   try {
     const courses = await Course.find({ enrolledStudents: req.user._id })

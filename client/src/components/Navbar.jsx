@@ -6,6 +6,7 @@ import brandLogo from '../assets/brand.png';
 import { useAuth } from '../context/AuthContext';
 import { useCourses } from '../context/CoursesContext';
 
+// shows navigation based on the current user role
 function Navbar() {
   const { user, logout } = useAuth();
   const { cartCount } = useCourses();

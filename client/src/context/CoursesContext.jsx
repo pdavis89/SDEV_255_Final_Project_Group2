@@ -3,6 +3,7 @@ import { useAuth } from './AuthContext';
 
 const CoursesContext = createContext(null);
 
+// keeps course data, cart data, and course actions in one place
 export function CoursesProvider({ children }) {
   const { user } = useAuth();
   const [courses, setCourses] = useState([]);
@@ -11,6 +12,7 @@ export function CoursesProvider({ children }) {
   const [error, setError] = useState('');
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://sdev-255-final-project-group2.onrender.com';
 
+  // builds headers for protected course requests
   function getAuthHeaders() {
     const token = localStorage.getItem('authToken');
     return {
@@ -19,6 +21,7 @@ export function CoursesProvider({ children }) {
     };
   }
 
+  // makes sure every course has an id field
   function normalizeCourse(course) {
     return {
       ...course,
@@ -26,6 +29,7 @@ export function CoursesProvider({ children }) {
     };
   }
 
+  // reloads courses from the backend
   const loadCourses = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -46,9 +50,11 @@ export function CoursesProvider({ children }) {
     }
   }, [API_BASE_URL]);
 
+  // loads courses when the app starts
   useEffect(() => {
     let ignore = false;
 
+    // loads the first course list for the page
     async function loadInitialCourses() {
       try {
         const res = await fetch(`${API_BASE_URL}/api/courses`);
@@ -80,6 +86,7 @@ export function CoursesProvider({ children }) {
     };
   }, [API_BASE_URL]);
 
+  // creates a new course
   async function addCourse(data) {
     const res = await fetch(`${API_BASE_URL}/api/courses`, {
       method: 'POST',
@@ -97,6 +104,7 @@ export function CoursesProvider({ children }) {
     return created;
   }
 
+  // updates an existing course
   async function updateCourse(id, updates) {
     const res = await fetch(`${API_BASE_URL}/api/courses/${id}`, {
       method: 'PUT',
@@ -114,6 +122,7 @@ export function CoursesProvider({ children }) {
     return updated;
   }
 
+  // deletes a course
   async function deleteCourse(id) {
     const res = await fetch(`${API_BASE_URL}/api/courses/${id}`, {
       method: 'DELETE',
@@ -128,6 +137,7 @@ export function CoursesProvider({ children }) {
     setCourses(prev => prev.filter(c => c.id !== id));
   }
 
+  // enrolls the student in a course
   async function enrollInCourse(id) {
     const res = await fetch(`${API_BASE_URL}/api/courses/${id}/enroll`, {
       method: 'POST',
@@ -144,6 +154,7 @@ export function CoursesProvider({ children }) {
     return updated;
   }
 
+  // drops the student from a course
   async function dropCourse(id) {
     const res = await fetch(`${API_BASE_URL}/api/courses/${id}/enroll`, {
       method: 'DELETE',
@@ -160,6 +171,7 @@ export function CoursesProvider({ children }) {
     return updated;
   }
 
+  // adds a course to the registration cart
   function addToCart(courseId) {
     setCartCourseIds(prev => {
       if (prev.includes(courseId)) return prev;
@@ -167,18 +179,22 @@ export function CoursesProvider({ children }) {
     });
   }
 
+  // removes a course from the registration cart
   function removeFromCart(courseId) {
     setCartCourseIds(prev => prev.filter(id => id !== courseId));
   }
 
+  // empties the registration cart
   function clearCart() {
     setCartCourseIds([]);
   }
 
+  // finds a course in local state by id
   function getCourseById(id) {
     return courses.find(c => c.id === id);
   }
 
+  // checks if the current student is enrolled
   function isEnrolled(course) {
     return Boolean(
       user &&
@@ -186,21 +202,25 @@ export function CoursesProvider({ children }) {
     );
   }
 
+  // returns the current student's schedule
   function getStudentSchedule() {
     if (!user) return [];
     return courses.filter(course => isEnrolled(course));
   }
 
+  // checks if a course is in the cart
   function isInCart(courseId) {
     return cartCourseIds.includes(courseId);
   }
 
+  // returns the full course objects in the cart
   function getCartCourses() {
     return cartCourseIds
       .map(courseId => getCourseById(courseId))
       .filter(Boolean);
   }
 
+  // enrolls the student in everything in the cart
   async function checkoutCart() {
     const cartCourses = getCartCourses();
     const results = [];
@@ -245,6 +265,7 @@ export function CoursesProvider({ children }) {
   );
 }
 
+// gives components access to course state and actions
 export function useCourses() {
   return useContext(CoursesContext);
 }

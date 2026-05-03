@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCourses } from '../context/CoursesContext';
 
+// shows a course summary and registration cart actions
 function CourseCard({ course }) {
   const { user } = useAuth();
   const { addToCart, removeFromCart, isEnrolled, isInCart } = useCourses();

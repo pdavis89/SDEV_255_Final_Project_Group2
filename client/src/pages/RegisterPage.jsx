@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import Hero from '../components/Hero';
 
+// shows the account registration form
 export default function RegisterPage() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -19,10 +20,12 @@ export default function RegisterPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
+  // updates form state when an input changes
   function handleChange(e) {
     setForm(prev => ({ ...prev, [e.target.name]: e.target.value }));
   }
 
+  // validates and submits a new account
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
@@ -59,13 +62,11 @@ export default function RegisterPage() {
 
   return (
   <>
-    {/* HERO */}
     <Hero
       title="CREATE ACCOUNT"
       subtitle="Register to start enrolling in courses"
     />
 
-    {/* TEAL BACKGROUND SECTION */}
     <div className="register-section">
       <div className="register-card">
 

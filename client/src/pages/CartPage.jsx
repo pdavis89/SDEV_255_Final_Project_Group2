@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { useCourses } from '../context/CoursesContext';
 
+// shows the registration cart before checkout
 export default function CartPage() {
   const {
     getCartCourses,
@@ -16,6 +17,7 @@ export default function CartPage() {
   const cartCourses = getCartCourses();
   const totalCredits = cartCourses.reduce((sum, course) => sum + (Number(course.credits) || 0), 0);
 
+  // enrolls the student in the cart courses
   async function handleCheckout() {
     setError('');
     setCheckingOut(true);

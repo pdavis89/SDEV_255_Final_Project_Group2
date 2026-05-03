@@ -1,3 +1,4 @@
+// filters the course list by search text
 export default function SearchBar({ value, onChange }) {
   return (
     <div className="mb-4">

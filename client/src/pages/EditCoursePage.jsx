@@ -3,6 +3,7 @@ import { useCourses } from '../context/CoursesContext';
 import CourseForm from '../components/CourseForm';
 import Hero from '../components/Hero';
 
+// shows the form for editing a course
 export default function EditCoursePage() {
   const { id } = useParams();
   const courseId = id;
@@ -11,7 +12,7 @@ export default function EditCoursePage() {
 
   const course = getCourseById(courseId);
 
-  // If someone hits /courses/99999/edit for a non-existent id, handle gracefully.
+  // handles a bad course id in the url
   if (!course) {
     return (
       <div className="container py-5">
@@ -24,6 +25,7 @@ export default function EditCoursePage() {
     );
   }
 
+  // saves updates and returns to the course page
   async function handleSubmit(data) {
     await updateCourse(courseId, data);
     navigate(`/courses/${courseId}`);

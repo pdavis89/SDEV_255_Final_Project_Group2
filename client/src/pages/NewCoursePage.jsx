@@ -3,13 +3,14 @@ import { useCourses } from '../context/CoursesContext';
 import CourseForm from '../components/CourseForm';
 import Hero from '../components/Hero';
 
+// shows the form for creating a course
 export default function NewCoursePage() {
   const { addCourse } = useCourses();
   const navigate = useNavigate();
 
+  // creates the course and opens its detail page
   async function handleSubmit(data) {
     const created = await addCourse(data);
-    // Send the user to the new course's detail page so they can see the result.
     navigate(`/courses/${created.id}`);
   }
 

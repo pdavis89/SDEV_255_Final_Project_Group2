@@ -7,12 +7,13 @@ import SearchBar from '../components/SearchBar';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import Hero from "../components/Hero";
 
-
+// shows the course catalog home page
 export default function Courses() {
   const { courses, loading, error } = useCourses();
   const { user } = useAuth();
   const [search, setSearch] = useState('');
 
+  // filters courses by the search box
   const filtered = courses.filter(course => {
     const q = search.toLowerCase();
     return (
@@ -23,7 +24,6 @@ export default function Courses() {
 
   return (
     <>
-      {/* HERO (NEW DESIGN) */}
       <Hero
         title="HOME PAGE"
         subtitle="Welcome to the Course Registration System. Browse courses, register for classes, and manage your schedule."

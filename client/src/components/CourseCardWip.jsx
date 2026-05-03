@@ -1,15 +1,17 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
+// older course card used for quick schedule testing
 export default function CourseCard({ course }) {
   const { user, addCourse } = useAuth();
   const navigate = useNavigate();
 
   const isAdded = user?.schedule.includes(course.id);
 
+  // adds a course or sends the user to login
   function handleAdd() {
     if (!user) {
-      // Send them to login if they try to add without being signed in
+      // send them to login if they are not signed in
       navigate('/login');
       return;
     }

@@ -1,11 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 
-// Shared form for both creating and editing a course.
-// - `initialValues` pre-fills the form (for edit). If omitted, starts empty.
-// - `onSubmit` receives the cleaned-up form data as an object.
-// - `submitLabel` lets the parent customize the button text.
-// - `cancelTo` is a route path for the Cancel button.
+// handles the form used for creating and editing courses
 export default function CourseForm({
   initialValues,
   onSubmit,
@@ -33,9 +29,11 @@ export default function CourseForm({
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
+  // loads professor options for the dropdown
   useEffect(() => {
     let ignore = false;
 
+    // gets professor users from the backend
     async function loadProfessors() {
       const token = localStorage.getItem('authToken');
 
@@ -79,16 +77,18 @@ export default function CourseForm({
     };
   }, [API_BASE_URL]);
 
+  // updates form state when an input changes
   function handleChange(e) {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
   }
 
+  // validates the form and sends clean data to the page
   async function handleSubmit(e) {
     e.preventDefault();
     setError('');
 
-    // Required-field validation
+    // checks required fields before saving
     if (!form.name.trim()) return setError('Course name is required.');
     if (!form.courseNumber.trim()) return setError('Course number is required.');
     if (!form.subject.trim()) return setError('Subject area is required.');

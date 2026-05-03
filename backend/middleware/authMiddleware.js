@@ -3,12 +3,14 @@ const User = require('../models/userModel');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your_jwt_secret';
 
+// gets the bearer token from the request header
 function getTokenFromHeader(req) {
   const authHeader = req.headers.authorization || '';
   const [scheme, token] = authHeader.split(' ');
   return scheme === 'Bearer' ? token : null;
 }
 
+// decodes the jwt token
 function parseToken(token) {
   if (!token) {
     throw new Error('No token provided');
@@ -16,6 +18,7 @@ function parseToken(token) {
   return jwt.decode(token, JWT_SECRET);
 }
 
+// finds the logged in user from the token
 async function authenticate(req, res, next) {
   try {
     const token = getTokenFromHeader(req);
@@ -40,6 +43,7 @@ async function authenticate(req, res, next) {
   }
 }
 
+// blocks users that do not have one of the allowed roles
 function requireRole(...allowedRoles) {
   return (req, res, next) => {
     if (!req.user) {

@@ -8,22 +8,23 @@ const authRoutes = require('./routes/authRoutes');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-// Middleware
+// sets up request parsing and cors
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// Basic health check route
+// confirms the api is running
 app.get('/', (req, res) => {
   res.json({ message: 'Express backend is running' });
 });
 
-// Course API routes
+// adds course api routes
 app.use('/api', courseRoutes);
 
-// Authentication routes
+// adds auth api routes
 app.use('/api/auth', authRoutes);
 
+// starts the server after mongodb connects
 connectDB()
   .then(() => {
     app.listen(PORT, () => {
