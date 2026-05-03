@@ -331,8 +331,71 @@ body {
   color: #08101c;
 }
 
+.schedule-page {
+  background-color: #070a10;
+}
+
+.schedule-card {
+  background-color: #0e1520;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+}
+
+.schedule-card h1 {
+  color: #f8fafc;
+}
+
+.schedule-page .text-muted {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+.schedule-table-wrapper {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.schedule-table {
+  color: #f8fafc;
+  background-color: #0f1725;
+}
+
+.schedule-table thead {
+  background-color: rgba(255,255,255,0.04);
+}
+
+.schedule-table th,
+.schedule-table td {
+  border-color: rgba(255,255,255,0.08);
+}
+
+.schedule-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.schedule-table tbody tr:hover {
+  background-color: rgba(255,255,255,0.03);
+}
+
+.schedule-badge {
+  background-color: rgba(110, 193, 194, 0.18);
+  color: #f8fafc;
+  border-radius: 12px;
+  padding: 0.35em 0.75em;
+}
+
+.schedule-card .btn-teal {
+  color: #08101c;
+}
+
+.schedule-card .btn-teal:hover,
+.schedule-card .btn-teal:focus {
+  color: #08101c;
+}
+
 .login-page {
-  background-color: #63a9a9;
+  background-color: #e9f6f6;
   min-height: 100vh;
   display: flex;
   align-items: center;
@@ -340,21 +403,39 @@ body {
 }
 
 .login-card {
-  background: white;
+  background: #ffffff;
+  color: #08101c;
   padding: 30px;
-  border-radius: 10px;
+  border-radius: 18px;
   width: 100%;
-  max-width: 500px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  max-width: 520px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h2,
+.login-card p,
+.login-card label,
+.login-card .form-text,
+.login-card .alert {
+  color: #08101c;
+}
+
+.login-card .text-muted {
+  color: rgba(0, 0, 0, 0.55) !important;
 }
 
 .login-input {
   width: 100%;
   border: none;
-  border-bottom: 1px solid #ccc;
-  padding: 10px;
+  border-bottom: 1px solid #c2d8d8;
+  padding: 12px 8px;
   margin-bottom: 20px;
   background: transparent;
+  color: #08101c;
+}
+
+.login-input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
 }
 
 .login-input:focus {
