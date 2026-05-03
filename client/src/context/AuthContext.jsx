@@ -7,11 +7,6 @@ export function AuthProvider({ children }) {
   const [authLoading, setAuthLoading] = useState(true);
   const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://sdev-255-final-project-group2.onrender.com';
 
-  // -----------------------------------------------------------------
-  // Replace mock auth calls with real backend API requests.
-  // The rest of the app does not need to change.
-  // -----------------------------------------------------------------
-
   useEffect(() => {
     async function restoreSession() {
       const token = localStorage.getItem('authToken');
