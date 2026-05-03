@@ -1,44 +1,127 @@
-/* Custom styles for hero animation - keeping these as they're specific */
+
 .hero {
   position: relative;
-
-  .base,
-  .framework,
-  .vite {
-    inset-inline: 0;
-    margin: 0 auto;
-  }
-
-  .base {
-    width: 170px;
-    position: relative;
-    z-index: 0;
-  }
-
-  .framework,
-  .vite {
-    position: absolute;
-  }
-
-  .framework {
-    z-index: 1;
-    top: 34px;
-    height: 28px;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg)
-      scale(1.4);
-  }
-
-  .vite {
-    z-index: 0;
-    top: 107px;
-    height: 26px;
-    width: auto;
-    transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg)
-      scale(0.8);
-  }
 }
 
-/* Icon styles */
+.hero .base,
+.hero .framework,
+.hero .vite {
+  inset-inline: 0;
+  margin: 0 auto;
+}
+
+.hero .base {
+  width: 170px;
+  position: relative;
+  z-index: 0;
+}
+
+.hero .framework,
+.hero .vite {
+  position: absolute;
+}
+
+.hero .framework {
+  z-index: 1;
+  top: 34px;
+  height: 28px;
+  transform: perspective(2000px) rotateZ(300deg) rotateX(44deg) rotateY(39deg) scale(1.4);
+}
+
+.hero .vite {
+  z-index: 0;
+  top: 107px;
+  height: 26px;
+  width: auto;
+  transform: perspective(2000px) rotateZ(300deg) rotateX(40deg) rotateY(39deg) scale(0.8);
+}
+
+
+.hero-container {
+  background-color: #fcfafa;
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px),
+    radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
+  background-size: 24px 24px, 48px 48px;
+  background-position: center;
+  padding: 120px 20px 80px;
+  color: #f8fafc;
+  text-align: center;
+  position: relative;
+}
+
+.hero-overlay {
+  background: rgba(8, 12, 22, 0.86);
+  padding: 60px 30px;
+  text-align: center;
+  border-radius: 28px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 1100px;
+}
+
+.hero-title {
+  font-size: clamp(3rem, 5vw, 5rem);
+  font-weight: 800;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  margin: 0;
+  line-height: 1;
+}
+
+.hero-divider {
+  width: 280px;
+  height: 6px;
+  background-color: #6ec1c2;
+  margin: 28px auto;
+  border-radius: 999px;
+  box-shadow: 0 0 30px rgba(110, 193, 194, 0.28);
+}
+
+.hero-subtitle {
+  font-size: 1.05rem;
+  max-width: 780px;
+  margin: 0 auto;
+  color: #edf2f7;
+  line-height: 1.8;
+}
+
+.hero-subtext {
+  margin-top: 24px;
+  font-size: 1rem;
+  max-width: 760px;
+  color: rgba(255,255,255,0.78);
+  line-height: 1.9;
+}
+
+.home-cta-row .btn {
+  min-width: 190px;
+  padding: 0.95rem 1.5rem;
+  border-radius: 12px;
+  font-size: 1rem;
+}
+
+.home-cta-row .btn-teal {
+  color: #08101c;
+  box-shadow: 0 14px 35px rgba(110, 193, 194, 0.18);
+}
+
+.home-cta-row .btn-teal:hover,
+.home-cta-row .btn-teal:focus {
+  background-color: #4a9c9b;
+  color: #fff;
+}
+
+body {
+  background-color: #faf6f6;
+  color: rgb(14, 11, 11);
+  margin: 0;
+  font-family: oswald;
+}
+
+
 .icon {
   width: 22px;
   height: 22px;
@@ -51,4 +134,339 @@
 .button-icon {
   height: 18px;
   width: 18px;
+  background-color: #6ec1c2;
+  
+
+}
+
+
+.CourseCard {
+  background-color: #1e1e1e;
+  border: 1px solid #2c2c2c;
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.CourseCard:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.course-form-page {
+  min-height: calc(100vh - 80px);
+  background: linear-gradient(180deg, #faf6f6 0%, #f2eeeb 100%);
+}
+
+.course-form-page .form-card {
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.08);
+  padding: 32px;
+}
+
+.course-form-page h1 {
+  font-size: 2.5rem;
+  letter-spacing: 0.03em;
+}
+
+.course-form-page .form-label {
+  font-weight: 600;
+  color: #343a40;
+}
+
+.course-form-page .form-control {
+  background-color: #f7f6f5;
+  border: 1px solid #d9d9db;
+  border-radius: 14px;
+  color: #131a2a;
+  padding: 14px 16px;
+}
+
+.course-form-page .form-control:focus {
+  border-color: #6ec1c2;
+  box-shadow: 0 0 0 0.2rem rgba(110, 193, 194, 0.18);
+}
+
+.course-form-page .form-control::placeholder {
+  color: #8b95a1;
+}
+
+.course-form-page .btn-primary {
+  background-color: #6ec1c2;
+  border-color: #6ec1c2;
+  color: #111;
+}
+
+.course-form-page .btn-primary:hover,
+.course-form-page .btn-primary:focus {
+  background-color: #58a9aa;
+  border-color: #58a9aa;
+}
+
+.course-form-page .btn-outline-secondary {
+  border-color: #d2d7df;
+  color: #4f5667;
+  background-color: #ffffff;
+}
+
+.course-form-page .btn-outline-secondary:hover,
+.course-form-page .btn-outline-secondary:focus {
+  background-color: #f4f5f7;
+  color: #111;
+}
+
+.course-form-page .alert {
+  border-radius: 14px;
+}
+
+/* Title inside card */
+.CourseCard h5 {
+  font-weight: 600;
+  margin-bottom: 10px;
+  font-size: 1.2rem;
+}
+
+
+.btn-drop {
+  background-color: #6ec1c2;
+  color: black;
+  border: none;
+  font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 6px;
+}
+
+.btn-drop:hover {
+  background-color: #58a9aa;
+}
+
+
+.course-search {
+  background-color: #111f2b;
+  border: 1px solid #25585f;
+  color: #f8fafc;
+  padding: 12px 14px;
+  border-radius: 14px;
+  width: 100%;
+}
+
+.course-search::placeholder {
+  color: rgba(248, 250, 252, 0.65);
+}
+
+.home-content {
+  background-color: #070a10;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+  margin: 0 0 2rem;
+  border-radius: 24px;
+}
+
+.home-header-section {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 1.5rem;
+}
+
+.home-header-section .text-white-60 {
+  color: rgba(255, 255, 255, 0.68);
+}
+
+.home-content .text-muted {
+  color: rgba(255, 255, 255, 0.62) !important;
+}
+
+.text-white-70 {
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+.course-card-theme {
+  background-color: #0f151d;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+}
+
+.course-card-theme .card-body {
+  padding: 1.5rem;
+}
+
+.course-card-theme .card-title,
+.course-card-theme .card-subtitle,
+.course-card-theme .card-text {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.course-card-theme .card-subtitle,
+.course-card-theme .card-text {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.btn-drop {
+  background-color: #6ec1c2;
+  color: #08101c;
+  border: none;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 10px;
+}
+
+.btn-drop:hover {
+  background-color: #58a9aa;
+}
+
+.btn-teal {
+  background-color: #6ec1c2;
+  color: #08101c;
+  border: none;
+  font-weight: 600;
+  padding: 10px 18px;
+  border-radius: 10px;
+}
+
+.btn-teal:hover,
+.btn-teal:focus {
+  background-color: #58a9aa;
+  color: #08101c;
+}
+
+.schedule-page {
+  background-color: #070a10;
+}
+
+.schedule-card {
+  background-color: #0e1520;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  box-shadow: 0 24px 80px rgba(0,0,0,0.18);
+}
+
+.schedule-card h1 {
+  color: #f8fafc;
+}
+
+.schedule-page .text-muted {
+  color: rgba(255,255,255,0.7) !important;
+}
+
+.schedule-table-wrapper {
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 22px;
+  overflow: hidden;
+}
+
+.schedule-table {
+  color: #f8fafc;
+  background-color: #0f1725;
+}
+
+.schedule-table thead {
+  background-color: rgba(255,255,255,0.04);
+}
+
+.schedule-table th,
+.schedule-table td {
+  border-color: rgba(255,255,255,0.08);
+}
+
+.schedule-table tbody tr {
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.schedule-table tbody tr:hover {
+  background-color: rgba(255,255,255,0.03);
+}
+
+.schedule-badge {
+  background-color: rgba(110, 193, 194, 0.18);
+  color: #f8fafc;
+  border-radius: 12px;
+  padding: 0.35em 0.75em;
+}
+
+.schedule-card .btn-teal {
+  color: #08101c;
+}
+
+.schedule-card .btn-teal:hover,
+.schedule-card .btn-teal:focus {
+  color: #08101c;
+}
+
+.login-page {
+  background-color: #e9f6f6;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background: #ffffff;
+  color: #08101c;
+  padding: 30px;
+  border-radius: 18px;
+  width: 100%;
+  max-width: 520px;
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.08);
+}
+
+.login-card h2,
+.login-card p,
+.login-card label,
+.login-card .form-text,
+.login-card .alert {
+  color: #08101c;
+}
+
+.login-card .text-muted {
+  color: rgba(0, 0, 0, 0.55) !important;
+}
+
+.login-input {
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid #c2d8d8;
+  padding: 12px 8px;
+  margin-bottom: 20px;
+  background: transparent;
+  color: #08101c;
+}
+
+.login-input::placeholder {
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.login-input:focus {
+  outline: none;
+  border-bottom: 2px solid #6ec1c2;
+}
+.register-section {
+  background-color: #56b6b2;
+  padding: 80px 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.register-card {
+  background: #f8f9fa;
+  width: 100%;
+  max-width: 500px;
+  border-radius: 10px;
+  padding: 40px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.register-input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.register-card button {
+  display: block;
+  margin: 25px auto 0;
 }

@@ -19,7 +19,7 @@ function Navbar() {
             height="30"
             className="me-2"
           />
-          <span className="fw-bold">CourseAdmin</span>
+          <span className="fw-bold">Course Registration System</span>
         </BsNavbar.Brand>
         <BsNavbar.Toggle aria-controls="navbarScroll" />
         <BsNavbar.Collapse id="navbarScroll">
