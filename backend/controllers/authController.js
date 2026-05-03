@@ -62,7 +62,7 @@ async function register(req, res) {
       password: hashedPassword,
       name: name ? name.trim() : undefined,
       role: normalizedRole,
-      status: 'offline',
+      status: 'online',
     });
 
     const token = createToken(user);
