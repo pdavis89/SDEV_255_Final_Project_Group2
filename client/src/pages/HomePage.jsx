@@ -23,33 +23,39 @@ export default function Courses() {
     <>
       {/* HERO (NEW DESIGN) */}
       <Hero
-        title="AVAILABLE COURSES"
-        subtitle="Browse and manage your registered courses"
+        title="HOME PAGE"
+        subtitle="Welcome to the Course Registration System. Browse courses, register for classes, and manage your schedule."
+        subtext="Use the navigation above or the buttons below to get started with your academic planning."
       />
 
-      {/* HEADER */}
-      <Container className="my-4">
-        <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <div>
-            <h2 className="fw-bold">Available Courses</h2>
-            <p className="text-muted mb-0">
-              {courses.length} course{courses.length !== 1 ? 's' : ''} available this semester
-            </p>
+      <div className="home-cta-row container my-4 d-flex flex-wrap gap-3 justify-content-center">
+        <Link to="/courses" className="btn btn-teal btn-lg">Browse Courses</Link>
+        <Link to="/register" className="btn btn-teal btn-lg">Register Now</Link>
+        <Link to="/login" className="btn btn-teal btn-lg">Login</Link>
+        <Link to="/schedule" className="btn btn-teal btn-lg">Manage Schedule</Link>
+      </div>
+
+      <div className="home-content py-4">
+        <Container className="my-4 home-header-section">
+          <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
+            <div>
+              <h2 className="fw-bold text-white">Available Courses</h2>
+              <p className="text-white-60 mb-0">
+                {courses.length} course{courses.length !== 1 ? 's' : ''} available this semester
+              </p>
+            </div>
+
+            <Link to="/courses/new">
+              <Button className="btn btn-teal px-4">+ Add Course</Button>
+            </Link>
           </div>
+        </Container>
 
-          <Link to="/courses/new">
-            <Button className="add-course-btn">+ Add Course</Button>
-          </Link>
-        </div>
-      </Container>
+        <Container className="my-4">
+          <SearchBar value={search} onChange={setSearch} />
+        </Container>
 
-      {/* SEARCH */}
-      <Container>
-        <SearchBar value={search} onChange={setSearch} />
-      </Container>
-
-      {/* COURSE CONTENT */}
-      {filtered.length === 0 ? (
+        {filtered.length === 0 ? (
         <div className="text-center py-5">
           {courses.length === 0 ? (
             <>
@@ -84,6 +90,7 @@ export default function Courses() {
           </Row>
         </Container>
       )}
+      </div>
     </>
   );
 }

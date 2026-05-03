@@ -1,6 +1,7 @@
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useCourses } from '../context/CoursesContext';
 import CourseForm from '../components/CourseForm';
+import Hero from '../components/Hero';
 
 export default function EditCoursePage() {
   const { id } = useParams();
@@ -29,20 +30,30 @@ export default function EditCoursePage() {
   }
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-lg-8">
-          <h1 className="mb-1">Edit Course</h1>
-          <p className="text-muted mb-4">Update the course details below.</p>
+    <>
+      <Hero
+        title="Edit Course"
+        subtitle="Update the course details to keep your catalog accurate and complete."
+      />
+      <div className="course-form-page py-5">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-lg-8">
+              <div className="form-card">
+                <h1 className="mb-1">Edit Course</h1>
+                <p className="text-muted mb-4">Update the course details below.</p>
 
-          <CourseForm
-            initialValues={course}
-            onSubmit={handleSubmit}
-            submitLabel="Save Changes"
-            cancelTo={`/courses/${courseId}`}
-          />
+                <CourseForm
+                  initialValues={course}
+                  onSubmit={handleSubmit}
+                  submitLabel="Save Changes"
+                  cancelTo={`/courses/${courseId}`}
+                />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
