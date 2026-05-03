@@ -56,8 +56,7 @@ export default function CourseDetailPage() {
     }
   }
 
-  const professorId = course.professor?.id || course.professor?._id || course.professor;
-  const isProfessorOwner = user?.role === 'professor' && professorId === user.id;
+  const isProfessor = user?.role === 'professor';
   const isStudent = user?.role === 'student';
   const isInSchedule = isEnrolled(course);
   const courseIsInCart = isInCart(courseId);
@@ -86,7 +85,7 @@ export default function CourseDetailPage() {
               </div>
             </div>
 
-            {isProfessorOwner && (
+            {isProfessor && (
               <div className="course-detail-actions">
                 <Link
                   to={`/courses/${courseId}/edit`}

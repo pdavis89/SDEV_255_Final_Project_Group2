@@ -1,4 +1,15 @@
 const Course = require('../models/courseModel');
+const User = require('../models/userModel');
+const mongoose = require('mongoose');
+
+async function getProfessorId(professorId) {
+  if (!professorId || !mongoose.Types.ObjectId.isValid(professorId)) {
+    return null;
+  }
+
+  const professor = await User.findOne({ _id: professorId, role: 'professor' });
+  return professor?._id || null;
+}
 
 // Fetch all courses from MongoDB and return them sorted by name.
 async function getCourses(req, res) {
@@ -33,13 +44,18 @@ async function getCourseById(req, res) {
 // Create a new course document in MongoDB from request body payload.
 async function createCourse(req, res) {
   try {
-    const { name, courseNumber, subject, credits, description, crn } = req.body;
+    const { name, courseNumber, subject, credits, description, crn, professor } = req.body;
 
-    if (!name || !courseNumber || !subject || credits == null || !description || !crn) {
+    if (!name || !courseNumber || !subject || credits == null || !description || !crn || !professor) {
       return res.status(400).json({
         success: false,
-        message: 'Name, courseNumber, subject, credits, description, and crn are required.',
+        message: 'Name, courseNumber, subject, credits, description, crn, and professor are required.',
       });
+    }
+
+    const professorId = await getProfessorId(professor);
+    if (!professorId) {
+      return res.status(400).json({ success: false, message: 'Selected professor was not found.' });
     }
 
     const course = await Course.create({
@@ -49,7 +65,7 @@ async function createCourse(req, res) {
       credits,
       description,
       crn,
-      professor: req.user._id,
+      professor: professorId,
       enrolledStudents: [],
     });
 
@@ -64,7 +80,7 @@ async function createCourse(req, res) {
 // Update an existing course by id with the provided fields.
 async function updateCourse(req, res) {
   try {
-    const allowedFields = ['name', 'courseNumber', 'subject', 'credits', 'description', 'crn'];
+    const allowedFields = ['name', 'courseNumber', 'subject', 'credits', 'description', 'crn', 'professor'];
     const updates = {};
 
     allowedFields.forEach(field => {
@@ -82,14 +98,15 @@ async function updateCourse(req, res) {
       return res.status(404).json({ success: false, message: 'Course not found.' });
     }
 
-    if (course.professor && !course.professor.equals(req.user._id)) {
-      return res.status(403).json({ success: false, message: 'Only the professor who created this course can update it.' });
+    if (updates.professor) {
+      const professorId = await getProfessorId(updates.professor);
+      if (!professorId) {
+        return res.status(400).json({ success: false, message: 'Selected professor was not found.' });
+      }
+      updates.professor = professorId;
     }
 
     Object.assign(course, updates);
-    if (!course.professor) {
-      course.professor = req.user._id;
-    }
     await course.save();
     await course.populate('professor', 'name email');
     await course.populate('enrolledStudents', 'name email');
@@ -106,10 +123,6 @@ async function deleteCourse(req, res) {
     const course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found.' });
-    }
-
-    if (course.professor && !course.professor.equals(req.user._id)) {
-      return res.status(403).json({ success: false, message: 'Only the professor who created this course can delete it.' });
     }
 
     await course.deleteOne();
