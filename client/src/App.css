@@ -38,7 +38,7 @@
 
 
 .hero-container {
-  background-color: #121212;
+  background-color: #fcfafa;
   background-image:
     radial-gradient(circle, rgba(255,255,255,0.12) 1px, transparent 1px),
     radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
